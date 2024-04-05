@@ -35,6 +35,11 @@ function App() {
   const [duration, setDuration] = useState('')
   const [directions, setDirections] = useState([])
   const [currentWeather, setCurrentWeather] = useState(null)
+  const [instructionsVisible, setInstructionsVisible] = useState(true);
+  const toggleInstructionsVisibility = () => {
+    setInstructionsVisible(!instructionsVisible);
+  };
+  
 
   /** @type React.MutableRefObject<HTMLInputElement> */
   const originRef = useRef()
@@ -205,18 +210,26 @@ function App() {
           />
         </HStack>
 
-        {/* Display Turn-by-Turn Directions */}
-        {directions.length > 0 && (
-          <Box mt={4} bgColor="gray.100" p={4} borderRadius="md" maxHeight="300px" overflowY="auto">
-            <Text fontSize="lg" fontWeight="bold" mb={2}>Turn-by-Turn Directions:</Text>
-            <ol style={{ listStyleType: 'decimal', paddingLeft: '20px', margin: '0' }}>
-              {directions.map((instruction, index) => (
-                <li key={index} style={{ marginBottom: '8px' }}>{instruction.replace(/<[^>]*>?/gm, '')}</li>
-              ))}
-            </ol>
+        
+      {/* Display Turn-by-Turn Directions */}
+      {instructionsVisible && directions.length > 0 && (
+        <Box mt={4} bgColor="gray.100" p={4} borderRadius="md" maxHeight="300px" overflowY="auto">
+          <Text fontSize="lg" fontWeight="bold" mb={2}>Turn-by-Turn Directions:</Text>
+          <ol style={{ listStyleType: 'decimal', paddingLeft: '20px', margin: '0' }}>
+            {directions.map((instruction, index) => (
+              <li key={index} style={{ marginBottom: '8px' }}>{instruction.replace(/<[^>]*>?/gm, '')}</li>
+            ))}
+          </ol>
+        </Box>
+      )}
 
-          </Box>
-        )}
+      {/* Button to toggle visibility of instructions box */}
+      <Button
+        mt={2}
+        onClick={toggleInstructionsVisibility}
+      >
+        {instructionsVisible ? 'Hide Instructions' : 'Show Instructions'}
+      </Button>
         {/* Weather box outside the main box */}
         {currentWeather && (
           <Box
